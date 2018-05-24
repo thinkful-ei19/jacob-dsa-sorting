@@ -89,15 +89,29 @@ function randSort(array, start=0, end=array.length, quickCount=0) {
   if (start >= end) {
     return array;
   }
-  const middle = partition(array, start, end);
-  array = quickSort(array, start, middle, quickCount);
-  array = quickSort(array, middle + 1, end, quickCount);
+  const middle = randPartition(array, start+1, end-1);
+  array = quickSort(array, start, middle-(Math.floor(middle*Math.random())), quickCount);
+  array = quickSort(array, middle+(Math.floor(middle*Math.random())), end, quickCount);
   return array;
 }
 
 
-function partition(array, start, end, partCount=0) {
+function randPartition(array, start, end, partCount=0) {
   const pivot = array[Math.floor(Math.random() * (array.length-1))];
+  let j = start;
+  let rand = Math.random()*10;
+  for (let i=start; i<end - 1; i++) {
+    partCount++;
+    if (rand<5) {
+      swap(array, i, j);
+      j++;
+    }
+  }
+  swap(array, end-1, j);
+  return j;
+}
+function partition(array, start, end, partCount=0) {
+  const pivot = array[end - 1];
   let j = start;
   for (let i=start; i<end - 1; i++) {
     partCount++;
@@ -109,19 +123,6 @@ function partition(array, start, end, partCount=0) {
   swap(array, end-1, j);
   return j;
 }
-// function partition(array, start, end, partCount=0) {
-//   const pivot = array[end - 1];
-//   let j = start;
-//   for (let i=start; i<end - 1; i++) {
-//     partCount++;
-//     if (array[i] <= pivot) {
-//       swap(array, i, j);
-//       j++;
-//     }
-//   }
-//   swap(array, end-1, j);
-//   return j;
-// }
 
 function mergeSort(array, mergeCount=0) {
   if (array.length <= 1) {
@@ -180,7 +181,7 @@ console.log(JSON.stringify(randSort(arr)));
   first letter is alphanumerically less than the second book's first 
   letter, we swap and then continue on until all swaps are made.
 
-  
+
   compare the letters alphanumerically
 
   function bubbleSortBooks(array) {
